@@ -1,7 +1,8 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
 import { dummyEvents } from '../DummyEvents';
 import { startOfDay } from 'date-fns';
 import { EventType, EventDataType } from '../types';
+import { useLocalStorage } from './useLocalStorage';
 
 type EventContextType = {
     events: EventDataType;
@@ -23,24 +24,24 @@ export function useEvents() {
 }
 
 export function EventHandler({ children }: { children: ReactNode }) {
-    const [events, setEvents] = useState<EventDataType>(dummyEvents);
+    const [events, setEvents] = useLocalStorage('calendarEvents', dummyEvents);
 
     const addEvent = ({ date, event }: { date: Date; event: EventType }) => {
-        setEvents((prevEvents) => {
+        setEvents((prevEvents: EventDataType) => {
             const key = startOfDay(date).toDateString();
             const dateEvents = prevEvents.get(key) || [];
 
             const newEvents = [...dateEvents, { ...event }];
             
             const updatedEvents = new Map(prevEvents);
-            updatedEvents.set(key, newEvents); 
+            updatedEvents.set(key, sortEvents(newEvents)); 
 
             return updatedEvents;
         });
     };
 
     const editEvent = ({ date, event }: { date: Date; event: EventType }) => {
-        setEvents((prevEvents) => {
+        setEvents((prevEvents: EventDataType) => {
             const key = startOfDay(date).toDateString();
             const dateEvents = prevEvents.get(key);
 
@@ -56,14 +57,14 @@ export function EventHandler({ children }: { children: ReactNode }) {
             });
 
             const updatedEvents = new Map(prevEvents);
-            updatedEvents.set(key, newEvents); 
+            updatedEvents.set(key, sortEvents(newEvents)); 
 
             return updatedEvents;
         });
     };
 
     const deleteEvent = ({ date, id }: { date: Date; id: string }) => {
-        setEvents((prevEvents) => {
+        setEvents((prevEvents: EventDataType) => {
             const key = startOfDay(date).toDateString();
             const dateEvents = prevEvents.get(key);
 
@@ -85,4 +86,14 @@ export function EventHandler({ children }: { children: ReactNode }) {
             {children}
         </EventsContext.Provider>
     );
+}
+
+
+function sortEvents(events: EventType[]): EventType[] {
+    return events.sort((a, b) => {
+        if (a.allDay && !b.allDay) return -1;
+        if (!a.allDay && b.allDay) return 1;
+
+        return a.startTime.localeCompare(b.startTime);
+    });
 }
