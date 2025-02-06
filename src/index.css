@@ -38,6 +38,12 @@ body {
     align-items: center;
 }
 
+@media (max-width: 500px) {
+    .header {
+        flex-direction: column;
+    }
+}
+
 .header > * {
     margin-right: 0.5rem;
 }
@@ -137,6 +143,12 @@ body {
     background-color: var(--border-color);
     gap: var(--border-size);
     padding: var(--border-size);
+}
+
+@media (max-width: 500px) {
+    .days {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
 }
 
 .day {
@@ -277,15 +289,22 @@ body {
     gap: 0.5rem;
     flex-grow: 1;
     overflow: hidden;
+    position: relative;
 }
 
 .events-view-more-btn {
     border: none;
-    background: none;
+    background: white;
     font-weight: bold;
     color: #555;
     cursor: pointer;
     width: 100%;
+    position: absolute;
+    height: 16px;
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .modal {

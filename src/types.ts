@@ -9,3 +9,5 @@ export type EventType = {
 };
 
 export type EventDataType = Map<string, EventType[]>;
+
+export type Callback<T extends unknown[]> = (...args: T) => void;

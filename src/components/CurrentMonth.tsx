@@ -10,6 +10,7 @@ import {
 } from 'date-fns';
 import { Day } from './Day';
 import { EventHandler } from './../hooks/EventHandler';
+import { useMemo } from 'react';
 
 type CurrentMonthType = {
     currentMonth: Date;
@@ -17,10 +18,12 @@ type CurrentMonthType = {
 
 export function CurrentMonth({ currentMonth }: CurrentMonthType) {
 
-    const visibleDates = eachDayOfInterval({
-        start: startOfWeek(startOfMonth(currentMonth)),
-        end: endOfWeek(endOfMonth(currentMonth))
-    });
+    const visibleDates = useMemo(() => {
+        return eachDayOfInterval({
+            start: startOfWeek(startOfMonth(currentMonth)),
+            end: endOfWeek(endOfMonth(currentMonth))
+        })
+    }, [currentMonth]);
 
     return (
         <EventHandler>

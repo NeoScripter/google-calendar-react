@@ -1,36 +1,28 @@
-export function FullEventsModal() {
+import { format } from 'date-fns';
+import { EventType } from '../types';
+import { Event } from './Event';
+
+export function FullEventsModal({
+    setShowModal,
+    date,
+    dayEvents
+}: {
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+    date: Date;
+    dayEvents: EventType[];
+}) {
     return (
         <div className="modal">
             <div className="overlay"></div>
             <div className="modal-body">
                 <div className="modal-title">
-                    6/8/23
-                    <button className="close-btn">&times;</button>
+                    {format(date, 'M/d/yy')}
+                    <button onClick={() => setShowModal(false)} className="close-btn">&times;</button>
                 </div>
                 <div className="events">
-                    <button className="all-day-event green event">
-                        <div className="event-name">Short</div>
-                    </button>
-                    <button className="event">
-                        <div className="color-dot blue"></div>
-                        <div className="event-time">7am</div>
-                        <div className="event-name">Event Name</div>
-                    </button>
-                    <button className="event">
-                        <div className="color-dot green"></div>
-                        <div className="event-time">8am</div>
-                        <div className="event-name">Event Name</div>
-                    </button>
-                    <button className="event">
-                        <div className="color-dot blue"></div>
-                        <div className="event-time">9am</div>
-                        <div className="event-name">Event Name</div>
-                    </button>
-                    <button className="event">
-                        <div className="color-dot blue"></div>
-                        <div className="event-time">10am</div>
-                        <div className="event-name">Event Name</div>
-                    </button>
+                    {dayEvents.map((event) => (
+                        <Event key={event.id} event={event} date={date} />
+                    ))}
                 </div>
             </div>
         </div>
