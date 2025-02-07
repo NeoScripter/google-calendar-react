@@ -6,6 +6,6 @@ This repository contains the source code for my practicing project which represe
 
 ## Screenshot
 
-![Website Screenshot](screenshot.webp)
+![Website Screenshot](public/screenshot.webp)
 
 *The preview.*
